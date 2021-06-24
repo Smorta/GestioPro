@@ -25,7 +25,7 @@ SECRET_KEY = 'q^rkygw&#1dpp^iy^atzz_kjq9=5$!009&r*@rtl0m%2uut3ab'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [planprologe.herokuapp.com]
+ALLOWED_HOSTS = ['planprologe.herokuapp.com']
 
 
 # Application definition
