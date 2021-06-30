@@ -62,7 +62,7 @@
         {% endfor %}
         {% for chant in chantierList %}
             {% for task in chant.timeline.taskList %}
-              <section id="phase-{{ task.phase.id}}" class="task {{task.line}} {{task.state}}" style="grid-row: {{chant.num|add:"2"}};grid-column: {{task.column}}">
+              <section id="phase-{{ task.phase.id}}" class="task {{task.line}} {{task.state}}" style="grid-row: {{chant.num|add:"2"}};grid-column: {{task.column|add:""}}">
                 <data value="{{ A.self.id }}"></data>
                 <div class="tb">
                     <p class="task_text">{{task.phase.Name}}</p>
@@ -96,25 +96,6 @@
                                 <input type="date" name="inputObjectif" placeholder="Objectif" value="{{ task.phase.Deadline|date:"Y-m-d" }}" class="form-control" maxlength="100" id="id_inputObjectif">
                             </div>
                         </div>
-                        <h4>Acheteur :</h4>
-                        <div class="row justify-content-center">
-                        <div class=" col-9 form-row ">
-                        {% if responsableList %}
-                            {% for R in responsableList %}
-                                 <div class="form-check col-md-4 check">
-                                 {% if R in task.phase.id_Responsable.all %}
-                                     <input class="form-check-input" id="Resp{{R.id}}" value="{{R.id}}" type="checkbox" name="Resp" checked>
-                                 {% else %}
-                                     <input class="form-check-input" id="Resp{{R.id}}" value="{{R.id}}" type="checkbox" name="Resp">
-                                 {% endif %}
-                                  <label class="form-check-label" for="Resp{{R.id}}">
-                                    {{R.FirstName}}
-                                  </label>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        </div>
-                        {% endif %}
                         <div class="form-row">
                         <a class="btn btn-secondary btn-list" >retour</a>
                         <button type="submit" href="{% url 'Phase_save' task.phase.id %}" class="btn btn-primary btn-list">Enregister</button>
