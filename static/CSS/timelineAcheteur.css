@@ -1,8 +1,13 @@
 body {
   background: #f5f7fa;
-  padding: 40px 0;
   box-sizing: border-box;
   color: #51565d;
+}
+
+header{
+    width: 95%;
+    margin: auto;
+    margin-bottom: 20px;
 }
 
 p{
@@ -16,19 +21,15 @@ h4{
   width: 100%;
   grid-template-columns: repeat(15, minmax(120px, 1fr));
   grid-template-rows: 50px;
-  /*grid-auto-rows: 160px;*/
-  overflow: auto;
 }
 
 
 .calendar-container {
   width: 95%;
   margin: auto;
-  overflow: hidden;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   background: #fff;
-  /* max-width: 1200px; */
 }
 .calendar-header {
   text-align: center;
@@ -47,12 +48,10 @@ h4{
   color: rgba(81, 86, 93, 0.4);
 }
 
+
 .ajout{
-    position: relative;
-    left: 20px;
-    bottom: 10px;
-    width: 200px;
-    text-align: center;
+  margin: 10px 0;
+  text-align: center;
 }
 
 .btn-ajout {
@@ -114,21 +113,6 @@ h4{
     left: 117px;
 }
 
-.item:nth-of-type(n + 1):nth-of-type(-n + 12) {
-  grid-row: 2;
-}
-.item:nth-of-type(n + 13):nth-of-type(-n + 24) {
-  grid-row: 3;
-}
-.item:nth-of-type(n + 25):nth-of-type(-n + 36) {
-  grid-row: 4;
-}
-.item:nth-of-type(n + 37):nth-of-type(-n + 48) {
-  grid-row: 5;
-}
-.item:nth-of-type(n + 49):nth-of-type(-n + 60) {
-  grid-row: 6;
-}
 .item:nth-of-type(12n + 1) {
   grid-column: 4/4;
   border-left: 1px solid rgba(166, 168, 179, 0.12) ;
@@ -212,7 +196,7 @@ h4{
   padding: 3px 5px 3px 8px;
   margin: 10px 5px;
   font-size: 16px;
-  height: 35px;
+  height: 55px;
   text-align: center;
   color: white;
   border-radius: 5px;
@@ -220,7 +204,7 @@ h4{
 
 .tb {
   display: table;
-  height: 35px;
+  height: 50px;
   width: 100%;
 }
 
@@ -236,27 +220,27 @@ h4{
 }
 
 .Line2{
-  margin-top: 50px;
+  margin-top: 65px;
 }
 
 .Line3{
-  margin-top: 95px;
+  margin-top: 130px;
 }
 
 .Line4{
-  margin-top: 10px;
+  margin-top: 190px;
 }
 
 .Line5{
-  margin-top: 86px;
+  margin-top: 250px;
 }
 
 .Line6{
-   margin-top: 160px;
+   margin-top: 310px;
 }
 
 .Line7{
-  margin-top: 235px;
+  margin-top: 370px;
 }
 
 .NotStart {
@@ -338,14 +322,9 @@ h4{
   color: darkblue;
 }
 
-.command{
-  display: flex;
-}
-
 .legend{
   display: flex;
-  position: absolute;
-  right: 130px;
+  align-items: center;
 }
 
 .legend p{
@@ -369,17 +348,62 @@ h4{
 .Legend-Finish{
   color: rgba(0,177,89,1);
 }
-.Time-Selector{
-  margin-left: 30px;
+.Time-Selector a{
+  position: relative;
+  top: 20px;
 }
 .btn-list{
   background: #666;
-  color: white;
   padding: 10px 10px;
+  color: white;
   border-radius: 5px;
   margin: 0px 5px;
+}
+.btn-list i{
+  color: white;
+}
+
+.btn-list:hover {
+  background: rgba(102, 102, 102, 0.5) ;
 }
 
 .hovered {
   background: #aaa;
+}
+
+.border-separator{
+  border-bottom: 3px solid black;
+}
+
+.form-taskContainer{
+  width: 600px;
+  position: relative;
+  right: 150px;
+  bottom: -8px;
+  background: #fff;
+  border: 1px solid rgba(166, 168, 179, 0.2);
+  color: #000;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  z-index: 2;
+  box-shadow: -18px -8px 19px rgb(0 0 0 / 20%);
+  text-align: start;
+}
+
+.form-taskContainer span{
+  position: absolute;
+  left: 50%;
+  top: -23px;
+  font-size: 24px;
+  color: white;
+}
+
+.check{
+  text-align: start;
+}
+
+.exit{
+  font-size: 30px;
+  color: #666;
 }

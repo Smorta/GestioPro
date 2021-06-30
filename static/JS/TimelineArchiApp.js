@@ -66,7 +66,7 @@
                type: "POST",
                data: jsonString,
                dataType : "html",
-               url: "../../../../RefreshTimelineAchat/"
+               url: "../RefreshTimelineArchi/"
            });
            setTimeout(function(){ location.reload(true); }, 100);
 
@@ -91,7 +91,7 @@
            $(this).submit(function(e){
                e.preventDefault();
                const phase_id = $(this).children("data").attr('value');
-               const form_url = "../../../../Phase/Save" + phase_id + "/";
+               const form_url = "../Phase/Save" + phase_id + "/";
                var form_method = $(this).attr("method");
                var form_data = $(this).serialize();
                console.log(form_data);
@@ -122,7 +122,7 @@
                type: "POST",
                data: jsonString,
                dataType : "html",
-               url: "../../../../ResizeTask/"
+               url: "../ResizeTask/"
            });
            setTimeout(function(){ location.reload(true); }, 100);
        }
@@ -135,7 +135,7 @@
                    type: "POST",
                    data: jsonString,
                    dataType: "html",
-                   url: "../../../../SetDateTimeline/"
+                   url: "../SetDateTimeline/"
                });
                setTimeout(function(){ location.reload(true); }, 100);
            });
