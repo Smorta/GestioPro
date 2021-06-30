@@ -89,6 +89,6 @@ def schedule(request):
             'responsableList': responsable_list,
             'form' : forms.PhaseForm
         }
-        return render(request, 'timelineArchi.html', context)
+        return render(request, 'TimelineArchi.html', context)
     else:
         return redirect('/Home')
