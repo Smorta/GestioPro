@@ -40,11 +40,8 @@ def refreshSchedule(request):
         return JsonResponse({"success": False}, status=400)
 
 def chantierAcheteur(resp_id):
-    with connection.cursor() as cursor:
-        request = 'SELECT DISTINCT id_chantier_id FROM Architect_phase NATURAL JOIN (SELECT phase_id AS id FROM Architect_phase_id_Responsable WHERE responsable_id = ' + str(resp_id) + ' )'
-        cursor.execute(request)
-        row = cursor.fetchall()
-    return row
+    querySet = Phase.objects.filter(id_Responsable = resp_id).values('id_chantier').distinct()
+    return querySet
 
 def schedule(request):
     if request.session.get('connected') == 'true':
@@ -60,8 +57,8 @@ def schedule(request):
             chantiers = chantierAcheteur(resp.id)
             j=0
             for chant in chantiers:
-                phases = Phase.objects.filter(id_Responsable=resp.id).filter(id_chantier=chant[0]).order_by('Name')
-                Self = Chantier.objects.get(pk=chant[0])
+                phases = Phase.objects.filter(id_Responsable=resp.id).filter(id_chantier=chant.get('id_chantier')).order_by('Name')
+                Self = Chantier.objects.get(pk=chant.get('id_chantier'))
                 timeline = Timeline(begin)
                 for phase in phases:
                     timeline.addTask(phase)

@@ -37,20 +37,17 @@ def PhaseFinish(resp_id):
     return Phase.objects.filter(id_Responsable=resp_id, State=2)
 
 def chantierResp(resp_id):
-    with connection.cursor() as cursor:
-        request = 'SELECT DISTINCT id_chantier_id FROM Architect_phase NATURAL JOIN (SELECT phase_id AS id FROM Architect_phase_id_Responsable WHERE responsable_id = ' + str(resp_id) + ' )'
-        cursor.execute(request)
-        row = cursor.fetchall()
-    return row
+    querySet = Phase.objects.filter(id_Responsable = resp_id).values('id_chantier').distinct()
+    return querySet
 
 def GetChantierList(begin, resp_id):
     chantier_list = list()
     chantiers = chantierResp(resp_id)
     j = 0
     for chant in chantiers:
-        phases = Phase.objects.filter(id_Responsable=resp_id).filter(id_chantier=chant[0]).order_by('Name')
-        Self = Chantier.objects.get(pk=chant[0])
-        timeline = Timeline(begin)
+        phases = Phase.objects.filter(id_Responsable=resp_id).filter(id_chantier=chant.get('id_chantier')).order_by('Name')
+        Self = Chantier.objects.get(pk=chant.get('id_chantier'))
+        timeline = Timeline(begin,2)
         for phase in phases:
             timeline.addTask(phase)
         chantier_list.append({"self": Self, "timeline": timeline, 'num': j})
@@ -71,14 +68,14 @@ def Modif(request, resp_id):
         name = resp.Name
         firstName = resp.FirstName
         if request.method == 'POST':
-            form = forms.ChantierForm(request.POST)
+            form = forms.ResponsableForm(request.POST)
             if form.is_valid():
                 name = form.cleaned_data['inputName']
                 firstName = form.cleaned_data['inputFirstName']
                 resp.Name = name
                 resp.FirstName = firstName
                 resp.save()
-                return redirect('/Architect/TimelineChant/')
+                return redirect('/Architect/TimelineArchi/')
 
         form_list = forms.ResponsableForm(initial={
             'inputName': name,

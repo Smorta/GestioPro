@@ -29,10 +29,8 @@ def refreshSchedule(request):
         return JsonResponse({"success": False}, status=400)
 
 def acheteursChantier(chantier):
-    with connection.cursor() as cursor:
-        cursor.execute('SELECT DISTINCT id FROM Architect_responsable NATURAL JOIN (SELECT DISTINCT responsable_id As id FROM  Architect_phase NATURAL JOIN (SELECT phase_id AS id , responsable_id FROM Architect_phase_id_Responsable) WHERE id_chantier_id = '+str(chantier.id)+')')
-        row = cursor.fetchall()
-    return row
+    querySet = Phase.objects.filter(id_chantier=chantier.id).values('id_Responsable').distinct()
+    return querySet
 
 def schedule(request):
     if request.session.get('connected') == 'true':
@@ -48,13 +46,14 @@ def schedule(request):
             acheteur = acheteursChantier(chant)
             j = 0
             for A in acheteur:
-                phases = Phase.objects.filter(id_chantier=chant.id).filter(id_Responsable=A[0]).exclude(Date_debut=None).order_by('Name')
-                Self = Responsable.objects.get(pk=A[0])
-                timeline = Timeline(begin)
-                for phase in phases:
-                    timeline.addTask(phase)
-                acheteurList.append({"self": Self, "timeline": timeline, "num": j})
-                j += 1
+                if A.get('id_Responsable') != None:
+                    phases = Phase.objects.filter(id_chantier=chant.id).filter(id_Responsable=A.get('id_Responsable')).exclude(Date_debut=None).order_by('Name')
+                    Self = Responsable.objects.get(pk=A.get('id_Responsable'))
+                    timeline = Timeline(begin)
+                    for phase in phases:
+                        timeline.addTask(phase)
+                    acheteurList.append({"self": Self, "timeline": timeline, "num": j})
+                    j += 1
 
             if i%3 == 0:
                 l = list()
