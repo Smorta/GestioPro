@@ -17,7 +17,7 @@ def New(request):
                     Name=name)[0]
                 id = str(Resp.id)
                 Resp.save()
-                return redirect('./Modif/' + id)
+                return redirect('./Modif' + id)
         form_list = forms.ResponsableForm()
         context = {
             'form': form_list,
