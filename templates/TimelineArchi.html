@@ -30,7 +30,7 @@
     <div class="calendar-header">
       <div class="row">
           <div class="col-2 ajout">
-              <a href="{% url 'Chantier_new' %}"><button class="btn-ajout" ><i class="fas fa-plus-circle"></i> Nouvelle acheteur</button></a>
+              <a href="{% url 'ResponsableNew' %}"><button class="btn-ajout" ><i class="fas fa-plus-circle"></i> Nouvelle acheteur</button></a>
           </div>
           <div class="col-2 offset-md-3 Time-Selector">
               <a class="btn-list"><data value="-3"></data><i class="fas fa-angle-double-left"></i></a>
@@ -101,7 +101,7 @@
                   {% endif %}
             {% endfor %}
             {% for A in acheteur %}
-                <div class="chantier"  style="grid-row: {{A.row.0}}/{{ A.row.1}};"><h2>{{A.self.FirstName}}<a href="à compléter"><i class="fas fa-edit"></i></a></h2>
+                <div class="chantier"  style="grid-row: {{A.row.0}}/{{ A.row.1}};"><h2>{{A.self.FirstName}}<a href="{% url 'ResponsableModif' A.self.id %}"><i class="fas fa-edit"></i></a></h2>
                     <div class="chantier-detail">
 
                     </div>
@@ -184,6 +184,5 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-    <script src="{% static "JS/TimelineAcheteurApp.js" %}"></script>
+    <script src="{% static "JS/TimelineArchiApp.js" %}"></script>
 </body>
-</html>>

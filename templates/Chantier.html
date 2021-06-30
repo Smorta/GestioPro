@@ -20,18 +20,15 @@
 <body>
     <div class="calendar-container">
         <div class="calendar-header">
-          <h1>
-             Prologe
-          </h1>
-          <div class="command">
-              <div class="Time-Selector">
-                  <a class="btn-list">Aujourd'hui</a>
-                  <a class="btn-list">Janv-Mars</a>
-                  <a class="btn-list">Avril-Juin</a>
-                  <a class="btn-list">Juillet-Septembre</a>
-                  <a class="btn-list">Octobre-Décembre</a>
+          <div class="row">
+              <div class="col-2 offset-md-4 Time-Selector">
+                  <a class="btn-list"><data value="-3"></data><i class="fas fa-angle-double-left"></i></a>
+                  <a class="btn-list"><data value="-1"></data><i class="fas fa-chevron-left"></i></a>
+                  <a class="btn-list"><data value="0"></data><i>Aujourd'hui</i></a>
+                  <a class="btn-list"><data value="1"></data><i class="fas fa-chevron-right"></i></a>
+                  <a class="btn-list"><data value="3"></data><i class="fas fa-angle-double-right"></i></a>
               </div>
-              <div class="legend">
+              <div class="col-2 offset-md-4 legend">
                   <i class="fas fa-square Legend-NotStart"></i><p>Pas commencé</p>
                   <i class="fas fa-square Legend-Progress"></i><p>En cours</p>
                   <i class="fas fa-square Legend-Finish"></i><p>Fin</p>
@@ -91,10 +88,10 @@
 			 	{{form.inputObjectif}}
 			</div>
 		 </div>
-		<div>
-            <h4>Phases planifiées:</h4>
-            {% if PhasePlan %}
-                {% for phase in PhasePlan %}
+        <div>
+            <h4>Phases non-planifiées:</h4>
+            {% if PhaseNonPlan %}
+                {% for phase in PhaseNonPlan %}
                     <ul class="list-group">
                         <li class="list-group-item phase state-{{ phase.State }}">
                             <div class="container-fluid">
@@ -124,10 +121,10 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <div>
-            <h4>Phases non-planifiées:</h4>
-            {% if PhaseNonPlan %}
-                {% for phase in PhaseNonPlan %}
+		<div>
+            <h4>Phases planifiées:</h4>
+            {% if PhasePlan %}
+                {% for phase in PhasePlan %}
                     <ul class="list-group">
                         <li class="list-group-item phase state-{{ phase.State }}">
                             <div class="container-fluid">
@@ -191,7 +188,7 @@
             {% endif %}
         </div>
 		<div class="form-row">
-		<a class="btn btn-secondary btn-list" href="{% url 'timelineChant' Year=year Month=month Day=day  %}">retour</a>
+		<a class="btn btn-secondary btn-list" href="{% url 'timelineChant'%}">retour</a>
 		<button type="submit" class="btn btn-primary btn-list">Enregister</button>
         <a class="btn btn-danger btn-list" href="{% url 'Chantier_delete' chant_id=chantier.id %}">Supprimer</a>
 		</div>
@@ -208,7 +205,7 @@
 <!--===============================================================================================-->
 	<script src={% static "vendor/select2/select2.min.js" %}></script>
 <!--===============================================================================================-->
-	<script src={% static "js/main.js" %}></script>
+	<script src={% static "js/ChantierApp.js" %}></script>
 
 </body>
 </html>

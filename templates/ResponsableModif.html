@@ -12,48 +12,151 @@
 	<link rel="stylesheet" type="text/css" href={% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}>
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href={% static 'CSS/Chantier.css' %}>
+    <link rel="stylesheet" type="text/css" href={% static 'CSS/ResponsableSchedule.css' %}>
 <!--===============================================================================================-->
 </head>
 <header>
 </header>
 <body>
+    <div class="calendar-container">
+    <div class="calendar-header">
+      <div class="row">
+          <div class="col-2 offset-md-3 Time-Selector">
+              <a class="btn-list"><data value="-3"></data><i class="fas fa-angle-double-left"></i></a>
+              <a class="btn-list"><data value="-1"></data><i class="fas fa-chevron-left"></i></a>
+              <a class="btn-list"><data value="0"></data><i>Aujourd'hui</i></a>
+              <a class="btn-list"><data value="1"></data><i class="fas fa-chevron-right"></i></a>
+              <a class="btn-list"><data value="3"></data><i class="fas fa-angle-double-right"></i></a>
+          </div>
+          <div class="col-2 offset-md-3 legend">
+              <i class="fas fa-square Legend-NotStart"></i><p>Pas commencé</p>
+              <i class="fas fa-square Legend-Progress"></i><p>En cours</p>
+              <i class="fas fa-square Legend-Finish"></i><p>Fin</p>
+          </div>
+      </div>
+    </div>
+        <div class="calendar"><span class="chantier-name">Chantier</span>
+        {% if WeekList %}
+            {% for week in WeekList %}
+                <span class="day-name">{{week.0|date:"d/m"}} - {{week.1|date:"d/m"}}</span>
+            {% endfor %}
+        {% endif %}
+        {% for chant in chantierList %}
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+            <div class="item" style="grid-row: {{ forloop.counter|add:"1" }}"></div>
+        {% endfor %}
+        {% for chant in chantierList %}
+            <div class="phase-indicator" style="grid-row: {{chant.num|add:"2"}};">
+                <p>{{ chant.self.Name }}</p>
+            </div>
+        {% endfor %}
+        {% for chant in chantierList %}
+            {% for task in chant.timeline.taskList %}
+              <section id="phase-{{ task.phase.id}}" class="task {{task.line}} {{task.state}}" style="grid-row: {{chant.num|add:"2"}};grid-column: {{task.column}}">
+                <data value="{{ A.self.id }}"></data>
+                <div class="tb">
+                    <p class="task_text">{{task.phase.Name}}</p>
+                </div>
+                <div style="display: none;" class="form-taskContainer">
+                    <i class="fas fa-times exit"></i>
+                    <span><i class="fas fa-caret-up"></i></span>
+                    <form method="POST">
+                        <data value="{{ task.phase.id }}"></data>
+                        <div class="form-row">
+                             <div class="form-group col-md-6">
+                                 <label for="inputName">Nom :</label>
+                                 <input type="text" name="inputName" placeholder="Nom" value="{{ task.phase.Name }}" class="form-control" maxlength="100" id="id_inputName">
+                             </div>
+                             <div class="form-group col-md-6">
+                                <label for="inputState">Etat :</label>
+                                <select name="inputState" class="form-control selectCustom" id="id_inputState">
+                                  <option value="0"{% if task.phase.State == "0" %} selected {% endif %}>Pas commencé</option>
+                                  <option value="1"{% if task.phase.State == "1" %} selected {% endif %}>En cours</option>
+                                  <option value="2"{% if task.phase.State == "2" %} selected {% endif %}>Fini</option>
+                                </select>
+                             </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputDebut">Date début :</label>
+                                <input type="date" name="inputDebut" placeholder="début" value="{{ task.phase.Date_debut|date:"Y-m-d" }}" class="form-control" maxlength="100" id="id_inputDebut">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputObjectif">Date Objectif :</label>
+                                <input type="date" name="inputObjectif" placeholder="Objectif" value="{{ task.phase.Deadline|date:"Y-m-d" }}" class="form-control" maxlength="100" id="id_inputObjectif">
+                            </div>
+                        </div>
+                        <h4>Acheteur :</h4>
+                        <div class="row justify-content-center">
+                        <div class=" col-9 form-row ">
+                        {% if responsableList %}
+                            {% for R in responsableList %}
+                                 <div class="form-check col-md-4 check">
+                                 {% if R in task.phase.id_Responsable.all %}
+                                     <input class="form-check-input" id="Resp{{R.id}}" value="{{R.id}}" type="checkbox" name="Resp" checked>
+                                 {% else %}
+                                     <input class="form-check-input" id="Resp{{R.id}}" value="{{R.id}}" type="checkbox" name="Resp">
+                                 {% endif %}
+                                  <label class="form-check-label" for="Resp{{R.id}}">
+                                    {{R.FirstName}}
+                                  </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        </div>
+                        {% endif %}
+                        <div class="form-row">
+                        <a class="btn btn-secondary btn-list" >retour</a>
+                        <button type="submit" href="{% url 'Phase_save' task.phase.id %}" class="btn btn-primary btn-list">Enregister</button>
+                         <a class="btn btn-danger btn-list" href="{% url 'Phase_delete' task.phase.id %}">Supprimer</a>
+                        </div>
+                        {% csrf_token %}
+                    </form>
+                </div>
+              </section>
+            {% endfor %}
+        {% endfor %}
+        </div>
 	<div class="container card">
 		<form method="POST">
 			<div class="form-row">
 			 <div class="form-group col-md-6">
-				 <label for="inputName">Nom</label>
+				 <label for="inputName">Prénom</label>
+				 {{form.inputFirstName}}
+			 </div>
+			 <div class="form-group col-md-6">
+				 <label for="inputEntite">Nom</label><br>
 				 {{form.inputName}}
 			 </div>
-			 <div class="form-group col-md-6">
-				 <label for="inputEntite">Entite</label><br>
-				 {{form.inputEntite}}
-			 </div>
 		 </div>
-		 <div class="form-row">
-			 <div class="form-group col-md-6">
-				<label for="inputDebut">Date début</label>
-				{{form.inputDebut}}
-				</div>
-			<div class="form-group col-md-6">
-				<label for="inputObjectif">Date Objectif</label>
-			 	{{form.inputObjectif}}
-			</div>
-		 </div>
-		<div>
-            <h4>Phases planifiées:</h4>
-            {% if PhasePlan %}
-                {% for phase in PhasePlan %}
+        <div>
+            <h4>Phases non-planifiées:</h4>
+            {% if PhaseNonPlan %}
+                {% for phase in PhaseNonPlan %}
                     <ul class="list-group">
                         <li class="list-group-item phase state-{{ phase.State }}">
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div class="col-sm-4">
-                                        <h5>{{ phase.Name }}</h5>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <h6>{{ phase.Date_debut|date:"d/m/y" }}-->{{ phase.Deadline|date:"d/m/y" }}</h6>
+                                    <div class="col-sm-3">
+                                        <h5>{{ phase.id_chantier.Name }}</h5>
                                     </div>
                                     <div class="col-sm-3">
+                                        <h5>{{ phase.Name }}</h5>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <h6>{{ phase.Date_debut|date:"d/m/y" }}-->{{ phase.Deadline|date:"d/m/y" }}</h6>
+                                    </div>
+                                    <div class="col-sm-2">
                                         {% if phase.State == "0" %}
                                             <span>Pas commencé</span>
                                         {% elif phase.State == "1" %}
@@ -72,10 +175,10 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <div>
-            <h4>Phases non-planifiées:</h4>
-            {% if PhaseNonPlan %}
-                {% for phase in PhaseNonPlan %}
+		<div>
+            <h4>Phases planifiées:</h4>
+            {% if PhasePlan %}
+                {% for phase in PhasePlan %}
                     <ul class="list-group">
                         <li class="list-group-item phase state-{{ phase.State }}">
                             <div class="container-fluid">
@@ -139,9 +242,9 @@
             {% endif %}
         </div>
 		<div class="form-row">
-		<a class="btn btn-secondary btn-list" href="{% url 'timelineChant' Year=year Month=month Day=day  %}">retour</a>
+		<a class="btn btn-secondary btn-list" href="{% url 'timelineArchi'  %}">retour</a>
 		<button type="submit" class="btn btn-primary btn-list">Enregister</button>
-        <a class="btn btn-danger btn-list" href="{% url 'Chantier_delete' chant_id=chantier.id %}">Supprimer</a>
+        <a class="btn btn-danger btn-list" href="">Supprimer</a>
 		</div>
 		{% csrf_token %}
 		</form>
@@ -155,5 +258,6 @@
 	<script src={% static "vendor/bootstrap/js/bootstrap.min.js" %}></script>
 <!--===============================================================================================-->
 	<script src={% static "vendor/select2/select2.min.js" %}></script>
+    <script src={% static "JS/ResponsableApp.js" %}></script>
 </body>
 </html>
