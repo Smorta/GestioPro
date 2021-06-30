@@ -22,7 +22,6 @@ class Chantier(models.Model):
     Date_debut = models.DateField()
     Date_fin = models.DateField()
     Entite = models.CharField(max_length=100)
-
     def __str__(self):
         return self.Name
 

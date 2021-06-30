@@ -1,12 +1,7 @@
-import json
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse, HttpResponseServerError
-from Achat.models import Responsable, User, Chantier, Modification, Phase
-from . import forms, ScheduleChant, chantierApp, phaseApp, ScheduleAchat
-from datetime import datetime, timedelta, date
-from django.db import connection
-from decimal import Decimal
-from Achat.timeline import Timeline
+from Architect.models import User, Chantier
+from datetime import datetime, date
+from . import forms, ScheduleChant, ScheduleAchat, phaseApp, chantierApp
 
 def login(request, Pseudo, Password):
     Users = User.objects.values_list('Pseudo', 'Password')
@@ -23,7 +18,7 @@ def login(request, Pseudo, Password):
 
 
 def index(request):
-    request.session.set_expiry(3600)
+    request.session.set_expiry(3600*4)
     form = forms.ConnexionForm()
     Pseudo = ''
     password = ''
@@ -41,7 +36,7 @@ def index(request):
                 year = request.session['year']
                 month = request.session['month']
                 day = request.session['day']
-                return redirect('/TimelineChant/'+year+"/"+month+"/"+day)
+                return redirect('/Achat/TimelineChant/')
     my_dict = {
         'form': form,
         'connected': request.session.get('connected'),
@@ -61,22 +56,23 @@ def achat(request):
     else:
         return redirect('/Home')
 
-def scheduleChant(request, Year, Month, Day):
-    return ScheduleChant.schedule(request, Year ,Month, Day)
+def scheduleChant(request):
+    return ScheduleChant.schedule(request)
 
 def refreshScheduleChant(request):
     return ScheduleChant.refreshSchedule(request)
 
-def scheduleAcheteur(request,Year,Month,Day):
-    return ScheduleAchat.schedule(request, Year, Month, Day)
+def scheduleAcheteur(request):
+    return ScheduleAchat.schedule(request)
 
 def refreshScheduleAchat(request):
     return ScheduleAchat.refreshSchedule(request)
 
 def resizeTask(request):
     return phaseApp.resize(request)
-def setDateTimelineAchat(request, Data):
-    return ScheduleAchat.setDateTimeline(request, Data)
+
+def setDateTimeline(request):
+    return ScheduleChant.setDateTimeline(request)
 
 def Chantier_new(request):
     return chantierApp.New(request)

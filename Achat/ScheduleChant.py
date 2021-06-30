@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, HttpResponseServerError
 from Achat.models import Responsable, User, Chantier, Modification, Phase
 from datetime import datetime, timedelta, date
+import calendar
 from django.db import connection
 from Achat.timeline import Timeline
 
@@ -23,7 +24,6 @@ def refreshSchedule(request):
             phase.Deadline = Fin + timedelta(days=delay * 7)
             phase.id_chantier = chantier
             phase.save()
-            return JsonResponse({"success": True}, status=200)
         except KeyError:
             HttpResponseServerError("Malformed data!")
 
@@ -38,13 +38,13 @@ def acheteursChantier(chantier):
         row = cursor.fetchall()
     return row
 
-def schedule(request,Year,Month,Day):
+def schedule(request):
     if request.session.get('connected') == 'true':
-
+        responsable_list = Responsable.objects.order_by('Name')
         chantiers = Chantier.objects.order_by('Name')
         i = 0
         chantier_list = list()
-        begin = date(int(Year), int(Month), int(Day))
+        begin = date(int(request.session.get('year')), int(request.session.get('month')), int(request.session.get('day')))
         weekList = Timeline(begin).WeekList
         for chant in chantiers:
             acheteurList = list()
@@ -79,7 +79,45 @@ def schedule(request,Year,Month,Day):
             'WeekList': weekList,
             'chantier_list': chantier_list,
             'connected': request.session.get('connected'),
+            'responsableList': responsable_list,
         }
         return render(request, 'timeline.html', context)
     else:
         return redirect('/Home')
+
+def addMonths(inputDate, month):
+    tmpMonth = inputDate.month - 1 + month
+    # Add floor((input month - 1 + k)/12) to input year component to get result year component
+    resYr = inputDate.year + tmpMonth // 12
+    # Result month component would be (input month - 1 + k)%12 + 1
+    resMnth = tmpMonth % 12 + 1
+    # Result day component would be minimum of input date component and max date of the result month (For example we cant have day component as 30 in February month)
+    # Maximum date in a month can be found using the calendar module monthrange function as shown below
+    resDay = min(inputDate.day, calendar.monthrange(resYr, resMnth)[1])
+    # construct result datetime with the components derived above
+    resDate = date(resYr, resMnth, resDay)
+
+    return resDate
+
+def setDateTimeline(request):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            Data = int(request.POST.get("data"))
+            if Data == 0:
+                request.session['year'] = str(date.today().year)
+                request.session['month'] = str(date.today().month)
+                request.session['day'] = str(date.today().day)
+
+            else:
+                actualDate = date(int(request.session['year']), int(request.session['month']), int(request.session['day']))
+                newDate = addMonths(actualDate, Data)
+                request.session['year'] = str(newDate.year)
+                request.session['month'] = str(newDate.month)
+                request.session['day'] = str(newDate.day)
+
+        except KeyError:
+            HttpResponseServerError("Malformed data!")
+
+        return JsonResponse({"success": True}, status=200)
+    else:
+        return JsonResponse({"success": False}, status=400)
