@@ -1,3 +1,3 @@
-release: python manage.py makemigrations Architect
-release: python manage.py migrate Architect
+release: python manage.py makemigrations 
+release: python manage.py migrate
 web: gunicorn GestioPro.wsgi
