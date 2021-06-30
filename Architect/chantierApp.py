@@ -38,7 +38,7 @@ def New(request):
             'form': form_list,
             'connected': request.session.get('connected'),
         }
-        return render(request, 'chantierNew.html', context)
+        return render(request, 'ChantierNew.html', context)
     else:
         return redirect('/Home')
 
@@ -109,7 +109,7 @@ def Modif(request, chant_id):
             'schedule': Getschedule(begin, chant_id),
             'connected': request.session.get('connected'),
         }
-        return render(request, 'chantier.html', context)
+        return render(request, 'Chantier.html', context)
     else:
         return redirect('/Home')
 
