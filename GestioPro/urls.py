@@ -20,5 +20,6 @@ from Achat import views
 
 urlpatterns = [
     url('admin/', admin.site.urls),
-    url('',include('Achat.urls')),
+    url('Achat/',include('Achat.urls')),
+    url('Architect/',include('Architect.urls'))
 ]
