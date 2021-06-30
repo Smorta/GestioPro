@@ -2,7 +2,7 @@
 {% load static %}
 <html lang="fr">
 <head>
-    <link rel="stylesheet" type="text/css" href={% static "CSS/timelineAcheteur.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "CSS/TimelineAcheteur.css" %}>
     <link rel="stylesheet" type="text/css" href={% static 'vendor/bootstrap/css/bootstrap.min.css' %}>
     <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
@@ -30,7 +30,7 @@
     <div class="calendar-header">
       <div class="row">
           <div class="col-2 ajout">
-              <a href="{% url 'ResponsableNew' %}"><button class="btn-ajout" ><i class="fas fa-plus-circle"></i> Nouvelle acheteur</button></a>
+              <a href="{% url 'ResponsableNew' %}"><button class="btn-ajout" ><i class="fas fa-plus-circle"></i> Nouvelle Architect</button></a>
           </div>
           <div class="col-2 offset-md-3 Time-Selector">
               <a class="btn-list"><data value="-3"></data><i class="fas fa-angle-double-left"></i></a>
@@ -47,7 +47,7 @@
       </div>
     </div>
     {% for acheteur in acheteurList %}
-        <div class="calendar"><span class="chantier-name">Acheteur</span><span class="chantier-name2"></span><span class="chantier-name2"></span>
+        <div class="calendar"><span class="chantier-name">Architect</span><span class="chantier-name2"></span><span class="chantier-name2"></span>
           {% if WeekList %}
             {% for week in WeekList %}
                 <span class="day-name">{{week.0|date:"d/m"}} - {{week.1|date:"d/m"}}</span>
