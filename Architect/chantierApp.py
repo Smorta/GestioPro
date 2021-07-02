@@ -124,7 +124,7 @@ def Delete(request, chant_id):
             year = request.session['year']
             month = request.session['month']
             day = request.session['day']
-            return redirect('/TimelineChant/' + year + "/" + month + "/" + day)
+            return redirect('Architect/TimelineChant/')
         return render(request, 'DeleteChantier.html', context)
     else:
         return redirect('/Home')
